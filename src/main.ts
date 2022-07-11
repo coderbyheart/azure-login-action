@@ -3,6 +3,7 @@ import * as exec from '@actions/exec';
 import { ExecOptions } from '@actions/exec/lib/interfaces';
 import * as io from '@actions/io';
 import { FormatType, SecretParser } from 'actions-secret-parser';
+import { stdout } from 'process';
 import { ServicePrincipalLogin } from './PowerShell/ServicePrincipalLogin';
 
 var azPath: string;
@@ -27,7 +28,10 @@ async function main() {
                         }
                         core.setFailed(error);
                     }
-                }
+                },
+                stdout: (data: Buffer) => {
+                  core.setOutput("token", data.toString);
+                },
             }
         }
         // Set user agent variable
